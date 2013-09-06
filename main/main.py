@@ -2,10 +2,12 @@
 
 from google.appengine.api import mail
 from flaskext import wtf
+from datetime import datetime
 import flask
 import config
 import model
 import util
+
 
 app = flask.Flask(__name__)
 app.config.from_object(config)
@@ -22,8 +24,18 @@ import admin
 ################################################################################
 @app.route('/<int:timestamp>/<path:title>')
 @app.route('/<int:timestamp>')
+@app.route('/<int:year>-<int:month>-<int:day>')
+@app.route('/<int:year>-<int:month>-<int:day>-<int:hour>-<int:minute>')
+@app.route('/<int:year>-<int:month>-<int:day>/<path:title>')
+@app.route('/<int:year>-<int:month>-<int:day>-<int:hour>-<int:minute>/<path:title>')
 @app.route('/')
-def countdown(timestamp=None, title=None):
+def countdown(timestamp=None, year=None, month=1, day=1, hour=0, minute=0, title=None):
+  if year:
+    try:
+      date = datetime(year, month, day, hour, minute)
+      timestamp = date.strftime('%s')
+    except:
+      pass
 
   return flask.render_template(
       'countdown.html',

@@ -9,14 +9,13 @@ window.YEAR = 365.25 * DAY
 
 window.init_countdown = () ->
   window.timestamp = parseInt($('.timestamp').data('timestamp')) * 1000
-  LOG 'sf', timestamp
   if isNaN(timestamp)
-    LOG 'sffd'
-    window.goal = new Date()
+    window.goal = moment()
   else
-    window.goal = new Date(timestamp)
+    window.goal = moment(timestamp + (moment().zone() * 1000 * 60 * 60))
 
-  ($ 'h2').html moment(goal).format('MMMM Do YYYY  @ HH:mm')
+  ($ '.local').html goal.zone(moment().zone()).format('MMMM Do YYYY  @ HH:mm')
+  ($ '.utc').html '<small>UTC</small> ' + goal.utc().format('MMMM Do YYYY  @ HH:mm')
 
   repaint()
 
@@ -26,7 +25,7 @@ window.init_countdown = () ->
 
 
 window.repaint = () ->
-  now = new Date()
+  now = moment.utc()
   milliseconds = Math.abs(now - goal).toFixed(1)
   seconds = (milliseconds / SECOND).toFixed(2)
   minutes = (milliseconds / MINUTE).toFixed(3)
