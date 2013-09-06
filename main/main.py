@@ -20,9 +20,17 @@ import admin
 ################################################################################
 # Main page
 ################################################################################
+@app.route('/<int:timestamp>/<path:title>')
+@app.route('/<int:timestamp>')
 @app.route('/')
-def welcome():
-  return flask.render_template('welcome.html', html_class='welcome')
+def countdown(timestamp=None, title=None):
+
+  return flask.render_template(
+      'countdown.html',
+      html_class='countdown',
+      timestamp=timestamp,
+      title=title,
+    )
 
 
 ################################################################################

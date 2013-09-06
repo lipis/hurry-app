@@ -1,8 +1,9 @@
 $ ->
-  LOG('app init')
 
 $ -> $('html.welcome').each ->
-  LOG('init welcome')
+
+$ -> $('html.countdown').each ->
+  init_countdown()
 
 $ -> $('html.profile').each ->
   init_profile()

@@ -43,6 +43,7 @@ SCRIPTS = {
         'lib/bootstrap/js/collapse.js',
         'lib/bootstrap/js/dropdown.js',
         'lib/bootstrap/js/tooltip.js',
+        'lib/moment.js',
       ],
     'scripts': [
         'src/coffee/common/util.coffee',
@@ -50,5 +51,6 @@ SCRIPTS = {
         'src/coffee/site/app.coffee',
         'src/coffee/site/profile.coffee',
         'src/coffee/site/admin.coffee',
+        'src/coffee/site/countdown.coffee',
       ],
   }

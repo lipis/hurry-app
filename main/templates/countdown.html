@@ -1,0 +1,49 @@
+# extends 'base.html'
+
+# block content
+  <div class="timers">
+    # if title
+      <h1>{{title}}</h1>
+    # endif
+
+    <div class="timestamp" data-timestamp="{{timestamp}}"></div>
+    <table class="table">
+      <tr><td colspan="3"><h2></h2></td></tr>
+      <tr class="years">
+        <td class="int"></td>
+        <td class="dec"></td>
+        <td class="desc">Years</td>
+      </tr>
+      <tr class="months">
+        <td class="int"></td>
+        <td class="dec"></td>
+        <td class="desc">Months</td>
+      </tr>
+      <tr class="weeks">
+        <td class="int"></td>
+        <td class="dec"></td>
+        <td class="desc">Weeks</td>
+      </tr>
+      <tr class="days">
+        <td class="int"></td>
+        <td class="dec"></td>
+        <td class="desc">Days</td>
+      </tr>
+      <tr class="hours">
+        <td class="int"></td>
+        <td class="dec"></td>
+        <td class="desc">Hours</td>
+      </tr>
+      <tr class="minutes">
+        <td class="int"></td>
+        <td class="dec"></td>
+        <td class="desc">Minutes</td>
+      </tr>
+      <tr class="seconds">
+        <td class="int"></td>
+        <td class="dec"></td>
+        <td class="desc">Seconds</td>
+      </tr>
+    </table>
+  </div>
+# endblock
