@@ -1,52 +1,83 @@
 # extends 'base.html'
 
 # block content
-  <div class="timers">
+  <div class="timers" data-timestamp="{{timestamp}}">
     # if title
       <h1>{{title}}</h1>
     # endif
 
-    <div class="timestamp" data-timestamp="{{timestamp}}"></div>
-    <table class="table">
-      <tr><td colspan="3">
-        <h2 class="local"></h2>
-        <h5 class="utc"></h5>
-      </td></tr>
-      <tr class="years">
-        <td class="int"></td>
-        <td class="dec"></td>
-        <td class="desc">Years</td>
-      </tr>
-      <tr class="months">
-        <td class="int"></td>
-        <td class="dec"></td>
-        <td class="desc">Months</td>
-      </tr>
-      <tr class="weeks">
-        <td class="int"></td>
-        <td class="dec"></td>
-        <td class="desc">Weeks</td>
-      </tr>
-      <tr class="days">
-        <td class="int"></td>
-        <td class="dec"></td>
-        <td class="desc">Days</td>
-      </tr>
-      <tr class="hours">
-        <td class="int"></td>
-        <td class="dec"></td>
-        <td class="desc">Hours</td>
-      </tr>
-      <tr class="minutes">
-        <td class="int"></td>
-        <td class="dec"></td>
-        <td class="desc">Minutes</td>
-      </tr>
-      <tr class="seconds">
-        <td class="int"></td>
-        <td class="dec"></td>
-        <td class="desc">Seconds</td>
-      </tr>
+    <table class="table table-condensed">
+      <thead>
+        <tr>
+          <td colspan="3">
+            <h2 class="local"></h2>
+            <h5 class="utc"></h5>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="seconds">
+          <td class="int"></td>
+          <td class="decimal">
+            <span class="dec"></span>
+            <sub class="desc">seconds</sub>
+          </td>
+        </tr>
+        <tr class="minutes">
+          <td class="int"></td>
+          <td class="decimal">
+            <span class="dec"></span>
+            <sub class="desc">minutes</sub>
+          </td>
+        </tr>
+        <tr class="hours">
+          <td class="int"></td>
+          <td class="decimal">
+            <span class="dec"></span>
+            <sub class="desc">hours</sub>
+          </td>
+        </tr>
+        <tr class="days">
+          <td class="int"></td>
+          <td class="decimal">
+            <span class="dec"></span>
+            <sub class="desc">days</sub>
+          </td>
+        </tr>
+        <tr class="weeks">
+          <td class="int"></td>
+          <td class="decimal">
+            <span class="dec"></span>
+            <sub class="desc">weeks</sub>
+          </td>
+        </tr>
+        <tr class="months">
+          <td class="int"></td>
+          <td class="decimal">
+            <span class="dec"></span>
+            <sub class="desc">months</sub>
+          </td>
+        </tr>
+        <tr class="years">
+          <td class="int col-xs-6"></td>
+          <td class="decimal col-xs-6">
+            <span class="dec"></span>
+            <sub class="desc">years</sub>
+          </td>
+        </tr>
+      </tbody>
     </table>
+  </div>
+
+  <div class="help collapsed">
+    <h4><span class="icon-arrow-up"></span></h4>
+    <ul class="list-unstyled">
+      <li><a href="/1234567890">/1234567890</a></li>
+      <li><a href="/1234567890/Unix time">/1234567890/Unix time</a></li>
+      <li><a href="/{{now.year + 1}}-07-08">/{{now.year + 1}}-07-08</a></li>
+      <li><a href="/2032-01-23-21:42">/2032-01-23-21:42</a></li>
+      <li><a href="/{{now.year + 1}}-02-02/Groundhog Day!">/{{now.year + 1}}-02-02/Groundhog Day!</a></li>
+      <li><a href="/2016-08-05-20:30/Opening Ceremony - Rio 2016">/2016-08-05-20:30/Opening Ceremony - Rio 2016</a></li>
+    </ul>
   </div>
 # endblock

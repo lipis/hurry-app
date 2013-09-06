@@ -8,20 +8,29 @@ window.YEAR = 365.25 * DAY
 
 
 window.init_countdown = () ->
-  window.timestamp = parseInt($('.timestamp').data('timestamp')) * 1000
+  window.timestamp = parseInt($('.timers').data('timestamp')) * 1000
   if isNaN(timestamp)
     window.goal = moment()
   else
-    window.goal = moment(timestamp + (moment().zone() * 1000 * 60 * 60))
+    window.goal = moment(timestamp)
 
-  ($ '.local').html goal.zone(moment().zone()).format('MMMM Do YYYY  @ HH:mm')
-  ($ '.utc').html '<small>UTC</small> ' + goal.utc().format('MMMM Do YYYY  @ HH:mm')
+  ($ '.local').html goal.zone(moment().zone()).format('MMMM Do YYYY')
+  ($ '.utc').html '<small>UTC</small> ' + goal.utc().format('HH:mm') + ' <small>LOCAL</small> ' + goal.zone(moment().zone()).format('HH:mm')
 
   repaint()
 
   setInterval ->
       repaint()
     , 83
+
+  ($ 'h4', '.help').click () ->
+    if ($ this).parent().hasClass('collapsed')
+      ($ this).parent().removeClass('collapsed')
+      ($ 'span', this).addClass('icon-rotate-180')
+    else
+      ($ this).parent().addClass('collapsed')
+      ($ 'span', this).removeClass('icon-rotate-180')
+
 
 
 window.repaint = () ->

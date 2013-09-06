@@ -1,50 +1,89 @@
 .timers {
   text-align: center;
+  max-width: 640px;
+  margin: 0 auto;
+  font-size: 2em;
   .int {
     text-align: right;
+    font-size: 1.4em;
   }
-  .dec {
+  .decimal {
     text-align: left;
     color: @gray-light;
+    vertical-align: middle;
   }
   .desc {
-    text-align: left;
-    color: @gray-light;
-    font-size: .4em;
-  }
-  h1 {
-    font-size: 4em;
-    margin-bottom: 32px;
-  }
-  h2 {
-    margin-bottom: 32px;
-  }
-  .table {
-    font-size: 2em;
+    font-size: .42em;
   }
 
-  // .years {
-  //   font-size: 3em;
-  // }
-  // .months {
-  //   font-size: 2.8em;
-  // }
-  // .weeks {
-  //   font-size: 2.5em;
-  // }
-  // .days {
-  //   font-size: 2.3em;
-  // }
-  // .hours {
-  //   font-size: 1.9em;
-  // }
-  // .minutes {
-  //   font-size: 1.7em;
-  // }
-  // .seconds {
-  //   font-size: 1.5em;
-  // }
-  // .milliseconds {
-  //   font-size: 1.2em;
-  // }
+  @media (max-width: @screen-xs-max) {
+    font-size: 1.3em;
+    h1 {
+      font-size: 30px;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+    h2 {
+      font-size: 26px;
+      margin-top: 8px;
+      margin-bottom: 4px;
+    }
+    h5 {
+      font-size: 12px;
+    }
+  }
 }
+
+.help {
+  @bg-color: @gray-lighter;
+  @border-color: darken(@bg-color, 30%);
+  max-width: 512px;
+  position: fixed;
+  margin: 0 auto;
+  bottom: 0;
+  width: 400px;
+  height: 160px;
+  left: 0;
+  right: 0;
+  transition: height 200ms;
+  -moz-transition:  height 200ms;
+  -webkit-transition: height 200ms;
+  -o-transition: height 200ms;
+  &.collapsed {
+    height: 24px;
+    opacity: .2;
+  }
+  ul {
+    background-color: @bg-color;
+    padding: 8px;
+    margin: 0;
+    border-radius: 4px 4px 0 0;
+    border: 2px solid @border-color;
+  }
+  h4 {
+    cursor: pointer;
+    text-align: center;
+    padding: 0;
+    margin: 0;
+    height: 24px;
+    z-index: 1;
+    span {
+      background-color: @bg-color;
+      padding: 4px;
+      width: 42px;
+      height: 26px;
+      display: inline-block;
+      box-sizing: border-box;
+      border-radius: 2px 2px 0 0;
+      border: 2px solid @border-color;
+      border-bottom: none;
+    }
+  }
+  @media (max-width: @screen-xs) {
+    width: 100%;
+    ul {
+      border-radius: 0;
+    }
+  }
+}
+

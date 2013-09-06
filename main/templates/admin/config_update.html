@@ -6,12 +6,6 @@
     <h1>{{title}}</h1>
   </div>
 
-  <div class="alert alert-info">
-    <strong>Heads Up!</strong>
-    For most of the settings you will have to restart the
-    <a href="https://developers.google.com/appengine/docs/adminconsole/instances" class="alert-link" target="_blank">instances</a>.
-  </div>
-
   <div class="row">
     <div class="col-md-4 col-sm-6">
       <form method="POST" action=".">
@@ -21,13 +15,7 @@
           {{forms.text_field(form.brand_name)}}
           {{forms.text_field(form.feedback_email)}}
           {{forms.text_field(form.analytics_id)}}
-          {{forms.text_field(form.facebook_app_id)}}
-          {{forms.text_field(form.facebook_app_secret)}}
-          {{forms.text_field(form.twitter_consumer_key)}}
-          {{forms.text_field(form.twitter_consumer_secret)}}
           {{forms.text_field(form.flask_secret_key)}}
-          {{forms.textarea_field(form.announcement_html)}}
-          {{forms.select_field(form.announcement_type)}}
 
           <button type="submit" class="btn btn-primary btn-block btn-loading" data-loading-text="Updating Config..">
             Update Config

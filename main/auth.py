@@ -7,7 +7,6 @@ import functools
 
 import flask
 from flaskext import login
-from flaskext import oauth
 
 import util
 import model
@@ -122,16 +121,12 @@ def signin():
     next_url = flask.url_for('welcome')
 
   google_signin_url = flask.url_for('signin_google', next=next_url)
-  twitter_signin_url = flask.url_for('signin_twitter', next=next_url)
-  facebook_signin_url = flask.url_for('signin_facebook', next=next_url)
 
   return flask.render_template(
       'signin.html',
       title='Please sign in',
       html_class='signin',
       google_signin_url=google_signin_url,
-      twitter_signin_url=twitter_signin_url,
-      facebook_signin_url=facebook_signin_url,
       next_url=next_url,
     )
 
@@ -179,127 +174,6 @@ def retrieve_user_from_google(google_user):
       google_user.email(),
       federated_id=google_user.user_id(),
       admin=users.is_current_user_admin(),
-    )
-
-
-################################################################################
-# Twitter
-################################################################################
-twitter_oauth = oauth.OAuth()
-
-
-twitter = twitter_oauth.remote_app(
-    'twitter',
-    base_url='https://api.twitter.com/1.1/',
-    request_token_url='https://api.twitter.com/oauth/request_token',
-    access_token_url='https://api.twitter.com/oauth/access_token',
-    authorize_url='https://api.twitter.com/oauth/authorize',
-    consumer_key=config.CONFIG_DB.twitter_consumer_key,
-    consumer_secret=config.CONFIG_DB.twitter_consumer_secret,
-  )
-
-
-@app.route('/_s/callback/twitter/oauth-authorized/')
-@twitter.authorized_handler
-def twitter_oauth_authorized(resp):
-  if resp is None:
-    flask.flash(u'You denied the request to sign in.')
-    return flask.redirect(util.get_next_url())
-
-  flask.session['oauth_token'] = (
-    resp['oauth_token'],
-    resp['oauth_token_secret']
-  )
-  user_db = retrieve_user_from_twitter(resp)
-  return signin_user_db(user_db)
-
-
-@twitter.tokengetter
-def get_twitter_token():
-  return flask.session.get('oauth_token')
-
-
-@app.route('/signin/twitter/')
-def signin_twitter():
-  flask.session.pop('oauth_token', None)
-  try:
-    return twitter.authorize(
-        callback=flask.url_for('twitter_oauth_authorized',
-        next=util.get_next_url()),
-      )
-  except:
-    flask.flash(
-        'Something went terribly wrong with Twitter sign in. Please try again.',
-        category='danger',
-      )
-    return flask.redirect(flask.url_for('signin', next=util.get_next_url()))
-
-
-def retrieve_user_from_twitter(response):
-  user_db = model.User.retrieve_one_by('twitter_id', response['user_id'])
-  if user_db:
-    return user_db
-
-  return create_user_db(
-      response['screen_name'],
-      response['screen_name'],
-      twitter_id=response['user_id'],
-    )
-
-
-################################################################################
-# Facebook
-################################################################################
-facebook_oauth = oauth.OAuth()
-
-facebook = facebook_oauth.remote_app(
-    'facebook',
-    base_url='https://graph.facebook.com/',
-    request_token_url=None,
-    access_token_url='/oauth/access_token',
-    authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=config.CONFIG_DB.facebook_app_id,
-    consumer_secret=config.CONFIG_DB.facebook_app_secret,
-    request_token_params={'scope': 'email'},
-  )
-
-
-@app.route('/_s/callback/facebook/oauth-authorized/')
-@facebook.authorized_handler
-def facebook_authorized(resp):
-  if resp is None:
-    return 'Access denied: reason=%s error=%s' % (
-      flask.request.args['error_reason'],
-      flask.request.args['error_description']
-    )
-  flask.session['oauth_token'] = (resp['access_token'], '')
-  me = facebook.get('/me')
-  user_db = retrieve_user_from_facebook(me.data)
-  return signin_user_db(user_db)
-
-
-@facebook.tokengetter
-def get_facebook_oauth_token():
-  return flask.session.get('oauth_token')
-
-
-@app.route('/signin/facebook/')
-def signin_facebook():
-  return facebook.authorize(callback=flask.url_for('facebook_authorized',
-      next=util.get_next_url(),
-      _external=True),
-    )
-
-
-def retrieve_user_from_facebook(response):
-  user_db = model.User.retrieve_one_by('facebook_id', response['id'])
-  if user_db:
-    return user_db
-  return create_user_db(
-      response['name'],
-      response['username'] if 'username' in response else response['id'],
-      response['email'],
-      facebook_id=response['id'],
     )
 
 

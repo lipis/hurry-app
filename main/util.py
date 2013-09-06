@@ -44,7 +44,7 @@ def get_next_url():
   referrer = flask.request.referrer
   if referrer and referrer.startswith(flask.request.host_url):
     return referrer
-  return flask.url_for('welcome')
+  return flask.url_for('countdown')
 
 
 ################################################################################
