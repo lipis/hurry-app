@@ -1,93 +1,115 @@
 .timers {
   text-align: center;
-  max-width: 640px;
   margin: 0 auto;
-  font-size: 2em;
   font-weight: 200;
-  .int {
-    text-align: right;
-    font-size: 1.1em;
-  }
-  .dec {
-    text-align: left;
-    color: @gray-light;
-    vertical-align: middle;
-    font-size: .8em;
-    sub {
-      font-size: .42em;
+
+  ul {
+    &:hover {
+      li {
+        opacity: 1 !important;
+      }
+    }
+    li {
+      position: relative;
+      .int {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 50%;
+        top: 0;
+        text-align: right;
+        padding-right: 2px;
+      }
+      .caption {
+        position: absolute;
+        left: 50%;
+        right: 0;
+        text-align: left;
+        padding-left: 2px;
+        color: @gray-light;
+        backgroundsd-color: green;
+        letter-spacing: 1px;
+      }
+      .dec {
+        position: absolute;
+        left: 50%;
+        right: 0;
+        text-align: left;
+        padding-left: 2px;
+        color: @gray-light;
+        letter-spacing: 1px;
+      }
     }
   }
 
   @media (max-width: @screen-xs-max) {
-    font-size: 1.5em;
-    h1 {
-      font-size: 30px;
-      margin-top: 8px;
-      margin-bottom: 4px;
-    }
-    h2 {
-      font-size: 26px;
-      margin-top: 8px;
-      margin-bottom: 4px;
-    }
-    h5 {
-      font-size: 12px;
-    }
+    .counters(32px);
+  }
+  @media (min-width: @screen-sm) {
+    .counters(42px);
+  }
+  @media (min-width: @screen-md) {
+    .counters(52px);
+  }
+  @media (min-width: @screen-lg) {
+    .counters(60px);
   }
 }
 
-.help {
-  @bg-color: @gray-lighter;
-  @border-color: darken(@bg-color, 30%);
-  max-width: 512px;
-  position: fixed;
-  margin: 0 auto;
-  bottom: 0;
-  width: 400px;
-  height: 150px;
-  left: 0;
-  right: 0;
-  transition: height 200ms;
-  -moz-transition:  height 200ms;
-  -webkit-transition: height 200ms;
-  -o-transition: height 200ms;
-  &.collapsed {
-    height: 24px;
-    opacity: .2;
+
+.counters(@size: 42px) {
+  h1 {
+    font-size: @size;
+    line-height: @size;
+    border-bottom: 1px solid @hr-border;
+    padding: floor(@size * .5) 0;
+    margin: 0;
   }
+  h2 {
+    font-size: floor(@size * .7);
+    line-height: floor(@size * .7);
+    margin: 0;
+    padding-top: floor(@size * .2);
+  }
+  h3 {
+    font-size: floor(@size * .4);
+    line-height: floor(@size * .4);
+    margin-top: floor(@size * .1);
+    border-bottom: 1px solid @hr-border;
+    padding-bottom: floor(@size * .2);
+    small {
+      font-size: floor(@size * .3);
+      line-height: floor(@size * .3);
+    }
+  }
+
   ul {
-    background-color: @bg-color;
-    padding: 8px;
-    margin: 0;
-    border-radius: 4px 4px 0 0;
-    border: 2px solid @border-color;
-  }
-  h4 {
-    cursor: pointer;
-    text-align: center;
-    padding: 0;
-    margin: 0;
-    height: 24px;
-    z-index: 1;
-    span {
-      background-color: @bg-color;
-      padding: 4px;
-      width: 42px;
-      height: 26px;
-      display: inline-block;
-      box-sizing: border-box;
-      border-radius: 2px 2px 0 0;
-      border: 2px solid @border-color;
-      border-bottom: none;
-    }
-  }
-  @media (max-width: @screen-xs) {
-    width: 100%;
-    ul {
-      border-radius: 0;
-      border-right: none;
-      border-left: none;
+    li {
+      @height: @size;
+      @height-int: @height;
+      @height-caption: floor(@size / 4);
+      @height-dec: (@height-int - @height-caption);
+      @offset: floor(@size / 11);
+      height: @height;
+      margin: (@height / 2) 0;
+      .int {
+        font-size: @height-int;
+        line-height: @height-int;
+      }
+      .caption {
+        bottom: @height-dec - @offset;
+        top: @offset;
+        font-size: @height-caption;
+        line-height: @height-caption;
+        color: @gray-light;
+      }
+      .dec {
+        bottom: @offset;
+        top: @height-caption + @offset;
+        font-size: (@height-dec - @offset * 2);
+        line-height: (@height-dec - @offset * 2);
+        color: @gray-light;
+      }
     }
   }
 }
-

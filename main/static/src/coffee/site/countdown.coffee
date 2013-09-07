@@ -14,14 +14,14 @@ window.init_countdown = () ->
   else
     window.goal = moment(timestamp)
 
-  ($ '.local').html goal.zone(moment().zone()).format('MMMM Do YYYY')
-  ($ '.utc').html '<small>UTC</small> ' + goal.utc().format('HH:mm') + ' <small>LOCAL</small> ' + goal.zone(moment().zone()).format('HH:mm')
+  ($ '.date').html goal.zone(moment().zone()).format('MMMM Do YYYY')
+  ($ '.time').html '<small>UTC</small> ' + goal.utc().format('HH:mm') + ' &nbsp; <small>LOCAL</small> ' + goal.zone(moment().zone()).format('HH:mm')
 
   repaint()
 
   setInterval ->
       repaint()
-    , 83
+    , 67
 
   ($ 'h4', '.help').click () ->
     if ($ this).parent().hasClass('collapsed')
@@ -46,28 +46,41 @@ window.repaint = () ->
 
 
   ($ '.int', '.years').text add_commas(years.split('.')[0])
-  ($ 'span', '.years').text years.split('.')[1]
+  ($ '.dec', '.years').text years.split('.')[1]
 
   ($ '.int', '.months').text add_commas(months.split('.')[0])
-  ($ 'span', '.months').text months.split('.')[1]
+  ($ '.dec', '.months').text months.split('.')[1]
 
   ($ '.int', '.weeks').text add_commas(weeks.split('.')[0])
-  ($ 'span', '.weeks').text weeks.split('.')[1]
+  ($ '.dec', '.weeks').text weeks.split('.')[1]
 
   ($ '.int', '.days').text add_commas(days.split('.')[0])
-  ($ 'span', '.days').text days.split('.')[1]
+  ($ '.dec', '.days').text days.split('.')[1]
 
   ($ '.int', '.hours').text add_commas(hours.split('.')[0])
-  ($ 'span', '.hours').text hours.split('.')[1]
+  ($ '.dec', '.hours').text hours.split('.')[1]
 
   ($ '.int', '.minutes').text add_commas(minutes.split('.')[0])
-  ($ 'span', '.minutes').text minutes.split('.')[1]
+  ($ '.dec', '.minutes').text minutes.split('.')[1]
 
   ($ '.int', '.seconds').text add_commas(seconds.split('.')[0])
-  ($ 'span', '.seconds').text seconds.split('.')[1]
+  ($ '.dec', '.seconds').text seconds.split('.')[1]
 
   ($ '.int', '.milliseconds').text add_commas(milliseconds.split('.')[0])
-  ($ 'span', '.milliseconds').text milliseconds.split('.')[1]
+  ($ '.dec', '.milliseconds').text milliseconds.split('.')[1]
+
+
+  ($ '.milliseconds').css('opacity', milliseconds)
+  ($ '.seconds').css('opacity', seconds)
+  ($ '.minutes').css('opacity', minutes)
+  ($ '.hours').css('opacity', hours)
+  ($ '.days').css('opacity', days)
+  ($ '.weeks').css('opacity', weeks)
+  ($ '.months').css('opacity', months)
+  ($ '.years').css('opacity', years)
+
+
+
 
 add_commas = (n) ->
     return String(n).replace(/(\d)(?=(\d{3})+$)/g, '$1,')
