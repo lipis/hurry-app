@@ -45,29 +45,29 @@ window.repaint = () ->
   years = (milliseconds / YEAR).toFixed(8)
 
 
-  ($ '.int', '.years').text(add_commas(years.split('.')[0]))
-  ($ '.dec', '.years').text(years.split('.')[1])
+  ($ '.int', '.years').text add_commas(years.split('.')[0])
+  ($ 'span', '.years').text years.split('.')[1]
 
-  ($ '.int', '.months').text(add_commas(months.split('.')[0]))
-  ($ '.dec', '.months').text(months.split('.')[1])
+  ($ '.int', '.months').text add_commas(months.split('.')[0])
+  ($ 'span', '.months').text months.split('.')[1]
 
-  ($ '.int', '.weeks').text(add_commas(weeks.split('.')[0]))
-  ($ '.dec', '.weeks').text(weeks.split('.')[1])
+  ($ '.int', '.weeks').text add_commas(weeks.split('.')[0])
+  ($ 'span', '.weeks').text weeks.split('.')[1]
 
-  ($ '.int', '.days').text(add_commas(days.split('.')[0]))
-  ($ '.dec', '.days').text(days.split('.')[1])
+  ($ '.int', '.days').text add_commas(days.split('.')[0])
+  ($ 'span', '.days').text days.split('.')[1]
 
-  ($ '.int', '.hours').text(add_commas(hours.split('.')[0]))
-  ($ '.dec', '.hours').text(hours.split('.')[1])
+  ($ '.int', '.hours').text add_commas(hours.split('.')[0])
+  ($ 'span', '.hours').text hours.split('.')[1]
 
-  ($ '.int', '.minutes').text(add_commas(minutes.split('.')[0]))
-  ($ '.dec', '.minutes').text(minutes.split('.')[1])
+  ($ '.int', '.minutes').text add_commas(minutes.split('.')[0])
+  ($ 'span', '.minutes').text minutes.split('.')[1]
 
-  ($ '.int', '.seconds').text(add_commas(seconds.split('.')[0]))
-  ($ '.dec', '.seconds').text(seconds.split('.')[1])
+  ($ '.int', '.seconds').text add_commas(seconds.split('.')[0])
+  ($ 'span', '.seconds').text seconds.split('.')[1]
 
-  ($ '.int', '.milliseconds').text(add_commas(milliseconds.split('.')[0]))
-  ($ '.dec', '.milliseconds').text(milliseconds.split('.')[1])
+  ($ '.int', '.milliseconds').text add_commas(milliseconds.split('.')[0])
+  ($ 'span', '.milliseconds').text milliseconds.split('.')[1]
 
 add_commas = (n) ->
     return String(n).replace(/(\d)(?=(\d{3})+$)/g, '$1,')

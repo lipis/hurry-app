@@ -3,17 +3,19 @@
   max-width: 640px;
   margin: 0 auto;
   font-size: 2em;
+  font-weight: 200;
   .int {
     text-align: right;
-    font-size: 1.4em;
+    font-size: 1.1em;
   }
-  .decimal {
+  .dec {
     text-align: left;
     color: @gray-light;
     vertical-align: middle;
-  }
-  .desc {
-    font-size: .42em;
+    font-size: .8em;
+    sub {
+      font-size: .42em;
+    }
   }
 
   @media (max-width: @screen-xs-max) {
@@ -42,7 +44,7 @@
   margin: 0 auto;
   bottom: 0;
   width: 400px;
-  height: 160px;
+  height: 156px;
   left: 0;
   right: 0;
   transition: height 200ms;
