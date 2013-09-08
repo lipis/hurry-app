@@ -6,6 +6,15 @@ window.WEEK = 7 * DAY
 window.MONTH = 30 * DAY
 window.YEAR = 365.25 * DAY
 
+window.UNITS = [
+    'seconds'
+    'minutes'
+    'hours'
+    'days'
+    'weeks'
+    'months'
+    'years'
+  ]
 
 window.init_countdown = () ->
   window.timestamp = parseInt($('.timers').data('timestamp')) * 1000
@@ -19,11 +28,24 @@ window.init_countdown = () ->
 
   repaint()
 
-  setInterval ->
-      repaint()
-    , 67
+  request_repaint = ->
+    repaint()
+    requestAnimationFrame request_repaint
 
-  ($ 'h4', '.help').click () ->
+  request_repaint()
+
+  requestAnimationFrame
+
+  for unit in UNITS
+    ($ '.units').append """
+        <li class="#{unit}">
+          <div class="int"></div>
+          <div class="caption">#{unit}</div>
+          <div class="dec"></div>
+        </li>
+      """
+
+  ($ '.help-header', '.help').click () ->
     if ($ this).parent().hasClass('collapsed')
       ($ this).parent().removeClass('collapsed')
       ($ 'span', this).addClass('icon-rotate-180')
@@ -32,55 +54,19 @@ window.init_countdown = () ->
       ($ 'span', this).removeClass('icon-rotate-180')
 
 
-
 window.repaint = () ->
   now = moment.utc()
   milliseconds = Math.abs(now - goal).toFixed(1)
-  seconds = (milliseconds / SECOND).toFixed(2)
-  minutes = (milliseconds / MINUTE).toFixed(3)
-  hours = (milliseconds / HOUR).toFixed(4)
-  days = (milliseconds / DAY).toFixed(5)
-  weeks = (milliseconds / WEEK).toFixed(6)
-  months = (milliseconds / MONTH).toFixed(7)
-  years = (milliseconds / YEAR).toFixed(8)
+  values =
+    seconds: (milliseconds / SECOND).toFixed(2)
+    minutes: (milliseconds / MINUTE).toFixed(3)
+    hours: (milliseconds / HOUR).toFixed(4)
+    days: (milliseconds / DAY).toFixed(5)
+    weeks: (milliseconds / WEEK).toFixed(6)
+    months: (milliseconds / MONTH).toFixed(7)
+    years: (milliseconds / YEAR).toFixed(8)
 
-
-  ($ '.int', '.years').text add_commas(years.split('.')[0])
-  ($ '.dec', '.years').text years.split('.')[1]
-
-  ($ '.int', '.months').text add_commas(months.split('.')[0])
-  ($ '.dec', '.months').text months.split('.')[1]
-
-  ($ '.int', '.weeks').text add_commas(weeks.split('.')[0])
-  ($ '.dec', '.weeks').text weeks.split('.')[1]
-
-  ($ '.int', '.days').text add_commas(days.split('.')[0])
-  ($ '.dec', '.days').text days.split('.')[1]
-
-  ($ '.int', '.hours').text add_commas(hours.split('.')[0])
-  ($ '.dec', '.hours').text hours.split('.')[1]
-
-  ($ '.int', '.minutes').text add_commas(minutes.split('.')[0])
-  ($ '.dec', '.minutes').text minutes.split('.')[1]
-
-  ($ '.int', '.seconds').text add_commas(seconds.split('.')[0])
-  ($ '.dec', '.seconds').text seconds.split('.')[1]
-
-  ($ '.int', '.milliseconds').text add_commas(milliseconds.split('.')[0])
-  ($ '.dec', '.milliseconds').text milliseconds.split('.')[1]
-
-
-  ($ '.milliseconds').css('opacity', milliseconds)
-  ($ '.seconds').css('opacity', seconds)
-  ($ '.minutes').css('opacity', minutes)
-  ($ '.hours').css('opacity', hours)
-  ($ '.days').css('opacity', days)
-  ($ '.weeks').css('opacity', weeks)
-  ($ '.months').css('opacity', months)
-  ($ '.years').css('opacity', years)
-
-
-
-
-add_commas = (n) ->
-    return String(n).replace(/(\d)(?=(\d{3})+$)/g, '$1,')
+  for unit in UNITS
+    ($ '.int', ".#{unit}").text add_commas(values[unit].split('.')[0])
+    ($ '.dec', ".#{unit}").text values[unit].split('.')[1]
+    ($ ".#{unit}").css('opacity', values[unit])

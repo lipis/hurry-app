@@ -6,7 +6,7 @@
   margin: 0 auto;
   bottom: 0;
   width: 400px;
-  height: 164px;
+  height: 202px;
   left: 0;
   right: 0;
   transition: height 200ms;
@@ -17,14 +17,14 @@
     height: 24px;
     opacity: .2;
   }
-  ul {
+  .help-body {
     background-color: @bg-color;
     padding: 8px;
     margin: 0;
     border-radius: 4px 4px 0 0;
     border: 2px solid @border-color;
   }
-  h4 {
+  .help-header {
     cursor: pointer;
     text-align: center;
     padding: 0;
@@ -43,21 +43,19 @@
       border-bottom: none;
     }
   }
+
+  .help-credit {
+    border-top: 1px solid @border-color;
+    padding-top: 8px;
+    text-align: center;
+  }
+
   @media (max-width: @screen-xs) {
     width: 100%;
-    ul {
+    .help-body {
       border-radius: 0;
       border-right: none;
       border-left: none;
     }
   }
-}
-
-.arrow-down {
-  width: 0;
-  height: 0;
-  margin: 0 auto;
-  border-left: 20px solid transparent;
-  border-right: 20px solid transparent;
-  border-top: 20px solid #f00;
 }

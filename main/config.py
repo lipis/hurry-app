@@ -38,6 +38,8 @@ SCRIPTS = {
     'libs': [
         'lib/jquery.js',
         'lib/moment.js',
+        'lib/bootstrap/js/alert.js',
+        'lib/bootstrap/js/button.js',
       ],
     'scripts': [
         'src/coffee/common/util.coffee',
