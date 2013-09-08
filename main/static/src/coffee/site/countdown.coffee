@@ -64,19 +64,34 @@ window.repaint = ->
     months: (milliseconds / MONTH).toFixed(7)
     years: (milliseconds / YEAR).toFixed(8)
 
+  base = get_parameter_by_name('base') or 10
+  try
+    base = Math.max(2, Math.min(16, parseInt(base)))
+  catch
+    base = 10
+
   for unit in UNITS
-    ($ '.int', ".#{unit}").text add_commas(values[unit].split('.')[0])
+    if base == 10
+      ($ '.int', ".#{unit}").text add_commas(values[unit].split('.')[0])
+    else
+      ($ '.int', ".#{unit}").text parseInt(values[unit].split('.')[0]).toString(base)
+
     ($ '.dec', ".#{unit}").text values[unit].split('.')[1]
 
     ($ ".#{unit}").css('opacity', Math.max(0.1, Math.min(1, parseFloat(values[unit]))))
 
 window.set_theme = ->
-  background = get_parameter_by_name 'background'
-  color = get_parameter_by_name 'color'
+  background = get_parameter_by_name('background') or get_parameter_by_name('b')
+  color = get_parameter_by_name('color') or get_parameter_by_name('c')
+  font = get_parameter_by_name('font') or get_parameter_by_name('f')
 
   background = new one.color(background)
   color = new one.color(color)
 
   ($ 'body').css 'background', background.hex() if background._red?
   ($ 'body, h1, h2, h3').css 'color', color.hex() if color._red?
+
+  if font
+    ($ 'head').append("<link href='http://fonts.googleapis.com/css?family=#{font}' rel='stylesheet' type='text/css'>")
+    ($ 'body, h1, h2, h3').css 'font-family', font
 
