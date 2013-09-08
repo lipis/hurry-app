@@ -17,6 +17,7 @@ window.UNITS = [
   ]
 
 window.init_countdown = () ->
+  set_theme()
   window.timestamp = parseInt($('.timers').data('timestamp')) * 1000
   if isNaN(timestamp)
     window.goal = moment()
@@ -26,22 +27,14 @@ window.init_countdown = () ->
   ($ '.date').html goal.zone(moment().zone()).format('MMMM Do YYYY')
   ($ '.time').html '<small>UTC</small> ' + goal.utc().format('HH:mm') + ' &nbsp; <small>LOCAL</small> ' + goal.zone(moment().zone()).format('HH:mm')
 
-  repaint()
-
-  request_repaint = ->
-    repaint()
-    requestAnimationFrame request_repaint
-
   request_repaint()
-
-  requestAnimationFrame
 
   for unit in UNITS
     ($ '.units').append """
         <li class="#{unit}">
           <div class="int"></div>
-          <div class="caption">#{unit}</div>
           <div class="dec"></div>
+          <div class="caption">#{unit}</div>
         </li>
       """
 
@@ -54,7 +47,11 @@ window.init_countdown = () ->
       ($ 'span', this).removeClass('icon-rotate-180')
 
 
-window.repaint = () ->
+window.request_repaint = ->
+  repaint()
+  requestAnimationFrame request_repaint
+
+window.repaint = ->
   now = moment.utc()
   milliseconds = Math.abs(now - goal).toFixed(1)
   values =
@@ -70,3 +67,13 @@ window.repaint = () ->
     ($ '.int', ".#{unit}").text add_commas(values[unit].split('.')[0])
     ($ '.dec', ".#{unit}").text values[unit].split('.')[1]
     ($ ".#{unit}").css('opacity', values[unit])
+
+window.set_theme = ->
+  background = get_parameter_by_name 'background'
+  color = get_parameter_by_name 'color'
+  border = get_parameter_by_name 'border'
+
+  ($ 'body').css 'background', background if background
+  ($ 'body, h1, h2, h3').css 'color', color if color
+  ($ 'body, h1, h2, h3').css 'border-color', border if border
+
