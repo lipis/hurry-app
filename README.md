@@ -10,7 +10,7 @@ It's good for birthdays, anniversaries, product launch dates, milestones, you na
 
 
 Examples
-========
+--------
 
 - [/2014-01-01](http://hurry-app.appspot.com/2014-01-01)
 - [/2013-01-01-18:30](http://hurry-app.appspot.com/2014-01-01-18:30)
