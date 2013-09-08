@@ -25,7 +25,8 @@ window.init_countdown = () ->
     window.goal = moment(timestamp)
 
   ($ '.date').html goal.zone(moment().zone()).format('MMMM Do YYYY')
-  ($ '.time').html '<small>UTC</small> ' + goal.utc().format('HH:mm') + ' &nbsp; <small>LOCAL</small> ' + goal.zone(moment().zone()).format('HH:mm')
+  ($ '.utc', '.time').html '<small>UTC</small> ' + goal.utc().format('HH:mm')
+  ($ '.local', '.time').html '<small>LOCAL</small> ' + goal.zone(moment().zone()).format('HH:mm')
 
   request_repaint()
 
