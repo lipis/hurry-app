@@ -68,7 +68,7 @@ window.repaint = ->
     ($ '.int', ".#{unit}").text add_commas(values[unit].split('.')[0])
     ($ '.dec', ".#{unit}").text values[unit].split('.')[1]
 
-    ($ ".#{unit}").css('opacity', Math.max(0.05, Math.min(1, parseFloat(values[unit]))))
+    ($ ".#{unit}").css('opacity', Math.max(0.1, Math.min(1, parseFloat(values[unit]))))
 
 window.set_theme = ->
   background = get_parameter_by_name 'background'
