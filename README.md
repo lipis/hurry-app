@@ -13,6 +13,7 @@ Examples
 - [/1234567890/Unix Time](http://hurry-app.appspot.com/1234567890/Unix%20Time)
 - [/1982-07-08-12:00/Lipis](http://hurry-app.appspot.com/1982-07-08-12:00/Lipis)
 
+(All input times are in UTC)
 
 Running
 -------
