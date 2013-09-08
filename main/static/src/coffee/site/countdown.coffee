@@ -93,5 +93,5 @@ window.set_theme = ->
 
   if font
     ($ 'head').append("<link href='http://fonts.googleapis.com/css?family=#{font}' rel='stylesheet' type='text/css'>")
-    ($ 'body, h1, h2, h3').css 'font-family', font
+    ($ '.timers, .timers h1, .timers h2, .timers h3').css 'font-family', font
 
