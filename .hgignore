@@ -1,0 +1,13 @@
+syntax: glob
+
+*.pyc
+*.pyo
+.DS_Store
+.git*
+.hg*
+main/index.yaml
+main/lib.zip
+main/node_modules
+main/static/dst
+main/static/min
+temp/
