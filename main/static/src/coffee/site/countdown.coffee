@@ -24,7 +24,7 @@ window.init_countdown = () ->
   else
     window.goal = moment(timestamp)
 
-  ($ '.date').html goal.zone(moment().zone()).format('MMMM Do YYYY')
+  ($ '.date').text goal.utc().format('MMMM Do YYYY')
   ($ '.utc', '.time').html '<small>UTC</small> ' + goal.utc().format('HH:mm')
   ($ '.local', '.time').html '<small>LOCAL</small> ' + goal.zone(moment().zone()).format('HH:mm')
 
