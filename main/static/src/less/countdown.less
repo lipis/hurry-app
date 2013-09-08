@@ -2,6 +2,11 @@
   text-align: center;
   margin: 0 auto;
   font-weight: 200;
+  .time {
+    span {
+      margin: 0 10px;
+    }
+  }
   small {
     color: inherit;
     opacity: .8;
@@ -13,6 +18,8 @@
       }
     }
     li {
+      transition: 0.5s ease;
+      -webkit-transition: 0.5s ease;
       position: relative;
       .int {
         position: absolute;
