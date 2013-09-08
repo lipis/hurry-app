@@ -23,18 +23,35 @@ import admin
 ################################################################################
 # Main page
 ################################################################################
-@app.route('/<int:timestamp>/<path:title>')
 @app.route('/<int:timestamp>')
+@app.route('/<int:timestamp>/<path:title>')
 @app.route('/<int:year>-<int:month>-<int:day>')
-@app.route('/<int:year>-<int:month>-<int:day>-<int:hour>:<int:minute>')
 @app.route('/<int:year>-<int:month>-<int:day>/<path:title>')
+@app.route('/<int:year>-<int:month>-<int:day>-<int:hour>')
+@app.route('/<int:year>-<int:month>-<int:day>-<int:hour>/<path:title>')
+@app.route('/<int:year>-<int:month>-<int:day>-<int:hour>:<int:minute>')
 @app.route('/<int:year>-<int:month>-<int:day>-<int:hour>:<int:minute>/<path:title>')
-@app.route('/<path:title>')
+@app.route('/<int:hour>:<int:minute>')
+@app.route('/<int:hour>:<int:minute>/<path:title>')
 @app.route('/')
-def countdown(timestamp=None, year=None, month=1, day=1, hour=0, minute=0, title=None):
-  if year:
+@app.route('/<path:title>')
+def countdown(timestamp=None, year=None, month=1, day=1, hour=None, minute=0, title=None):
+  if year is not None and hour is not None:
     try:
       date = datetime.datetime(year, month, day, hour, minute)
+      timestamp = date.strftime('%s')
+    except:
+      pass
+  elif year is not None:
+    try:
+      date = datetime.datetime(year, month, day)
+      timestamp = date.strftime('%s')
+    except:
+      pass
+  elif hour is not None:
+    try:
+      now = datetime.datetime.utcnow()
+      date = datetime.datetime(now.year, now.month, now.day, hour, minute)
       timestamp = date.strftime('%s')
     except:
       pass
