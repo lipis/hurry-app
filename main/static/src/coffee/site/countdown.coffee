@@ -71,9 +71,10 @@ window.repaint = ->
 window.set_theme = ->
   background = get_parameter_by_name 'background'
   color = get_parameter_by_name 'color'
-  border = get_parameter_by_name 'border'
 
-  ($ 'body').css 'background', background if background
-  ($ 'body, h1, h2, h3').css 'color', color if color
-  ($ 'body, h1, h2, h3').css 'border-color', border if border
+  background = new one.color(background)
+  color = new one.color(color)
+
+  ($ 'body').css 'background', background.hex() if background._red?
+  ($ 'body, h1, h2, h3').css 'color', color.hex() if color._red?
 

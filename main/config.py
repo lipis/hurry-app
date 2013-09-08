@@ -30,11 +30,15 @@ STYLES = [
   ]
 
 SCRIPTS_MODULES = [
+    'one',
     'libs',
     'scripts',
   ]
 
 SCRIPTS = {
+    'one': [
+        'lib/one-color-all.js',
+      ],
     'libs': [
         'lib/jquery.js',
         'lib/moment.js',
