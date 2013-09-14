@@ -1,11 +1,12 @@
 <div class="help">
+  # set welcome_hide = 'hide' if request.path == '/' or request.args.get('edit') != None else ''
   <ul class="list-inline">
-    <li>
+    <li class="{{welcome_hide}}">
       <a href="{{request.url}}{{'?' if request.url.find('?') == -1 else '&'}}edit">
         <span class='icon-home'></span>
       </a>
     </li>
-    <li>
+    <li class="{{welcome_hide}}">
       <a href="{{request.url}}{{'?' if request.url.find('?') == -1 else '&'}}edit">
         <span class='icon-pencil'></span>
       </a>

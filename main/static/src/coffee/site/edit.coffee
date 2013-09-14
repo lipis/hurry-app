@@ -67,7 +67,7 @@ window.update_url = ->
     params += "c=#{($ '#color').val()}&"
   if ($ '#font').val() and ($ '#font').val() != 'Overlock'
     font = ($ '#font').val()
-    font = font.replace(/\ /, '+')
+    font = font.replace(/\ /g, '+')
     params += "f=#{font}&"
 
   if url
@@ -77,11 +77,13 @@ window.update_url = ->
       url += "?#{params}"
 
     ($ '#url').show()
-    popout = "<a href='#{url}#{if url.indexOf('?') == -1 then '?' else '&'}embed' class='popout alert-link'><span class='icon-external-link-sign'></span></a>"
+    embed_url = "#{url}#{if url.indexOf('?') == -1 then '?' else '&'}embed"
+    popout = "<a class='popout alert-link'><span class='icon-external-link-sign'></span></a>"
     url = location.origin + url
     ($ '#url').html """
         #{popout} | <a href="#{url}" class="alert-link">#{url}</a>
       """
+    ($ '.popout').attr 'href', embed_url
   else
     ($ '#url').hide()
 
@@ -95,10 +97,9 @@ window.set_theme = ->
   if ($ '#color').length == 1
     color = ($ '#color').val()
 
-  font = get_parameter_by_name('font') or get_parameter_by_name('f')
+  font = get_parameter_by_name('font') or get_parameter_by_name('f')  or 'Overlock'
   if ($ '#font').length == 1
     font = ($ '#font').val()
-  LOG ($ '#font').val()
   background = new one.color(background)
   color = new one.color(color)
 
@@ -109,22 +110,15 @@ window.set_theme = ->
     ($ '#google-font').remove()
   if font
     ($ 'head').append("<link id='google-font' href='http://fonts.googleapis.com/css?family=#{font}' rel='stylesheet'>")
-    ($ '.timers, .timers h1, .timers h2, .timers h3').css 'font-family', "#{font}, Overlock, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+    ($ '.timers, .timers h1, .timers h2, .timers h3').css 'font-family', "#{font}, 'Helvetica Neue', Helvetica, Arial, sans-serif"
 
 
-window.init_google_font = () ->
-  $.ajax
-    type: 'GET'
-    url: 'https://www.googleapis.com/webfonts/v1/webfonts?sort=alpha&key=AIzaSyB4qa_3llQSgiPms7-19Z3StQB6cUNNMH4'
-    contentType: 'application/json'
-    accepts: 'application/json'
-    dataType: 'json'
-    success: (response) ->
-      ($ '#font').empty()
-      for item in response.items
-        option = $("<option></option>").attr('value', item.family).text item.family
-        if item.family == ($ '#font').data('selected')
-          option.attr 'selected', 'selected'
-        ($ '#font').append option
-    error: (jqXHR, textStatus, errorThrown) ->
-      LOG 'Google Font Error'
+window.init_google_font = (data) ->
+  return if not data?.items?
+
+  ($ '#font').empty()
+  for item in data.items
+    option = $("<option></option>").attr('value', item.family).text item.family
+    if item.family == ($ '#font').data('selected')
+      option.attr 'selected', 'selected'
+    ($ '#font').append option

@@ -104,6 +104,13 @@ window.repaint = ->
     ($ '.dec', ".#{unit}").text values[unit].split('.')[1]
     ($ ".#{unit}").css('opacity', Math.max(0.1, Math.min(1, parseFloat(values[unit]))))
 
+  digits = Math.floor(Math.log(values.seconds)/Math.LN10)
+  percent = 50 + 15 * (digits / 10.0)
+  ($ '.int').css 'right', "#{100 - percent}%"
+  ($ '.dec').css 'left', "#{percent}%"
+  ($ '.caption').css 'left', "#{percent}%"
+
+
 window.request_repaint = ->
   repaint()
   requestAnimationFrame request_repaint
