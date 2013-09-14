@@ -2,10 +2,10 @@ window.init_edit = ->
   window.timers = new Timers ($ '.timers')
   return if ($ '#edit').length == 0
 
-  ($ 'input').change (e) ->
+  ($ 'input, select').change (e) ->
     update_counter e
 
-  ($ 'input').keyup (e) ->
+  ($ 'input, select').keyup (e) ->
     update_counter e
 
   try
@@ -18,7 +18,7 @@ window.init_edit = ->
     ($ '#color').val '#000000'
 
   update_url()
-
+  init_google_font()
 
 window.update_counter = (event) ->
   group = $(event.currentTarget).data('group')
@@ -26,6 +26,7 @@ window.update_counter = (event) ->
     ($ "##{group}-check").attr 'checked', true
 
   timers.set_timestamp calculate_timestamp ($ '#date').val(), ($ '#time').val()
+  timers.set_title ($ '#title').val()
   update_url()
   set_theme()
 
@@ -97,7 +98,7 @@ window.set_theme = ->
   font = get_parameter_by_name('font') or get_parameter_by_name('f')
   if ($ '#font').length == 1
     font = ($ '#font').val()
-
+  LOG ($ '#font').val()
   background = new one.color(background)
   color = new one.color(color)
 
@@ -109,3 +110,21 @@ window.set_theme = ->
   if font
     ($ 'head').append("<link id='google-font' href='http://fonts.googleapis.com/css?family=#{font}' rel='stylesheet'>")
     ($ '.timers, .timers h1, .timers h2, .timers h3').css 'font-family', "#{font}, Overlock, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+
+
+window.init_google_font = () ->
+  $.ajax
+    type: 'GET'
+    url: 'https://www.googleapis.com/webfonts/v1/webfonts?sort=alpha&key=AIzaSyB4qa_3llQSgiPms7-19Z3StQB6cUNNMH4'
+    contentType: 'application/json'
+    accepts: 'application/json'
+    dataType: 'json'
+    success: (response) ->
+      ($ '#font').empty()
+      for item in response.items
+        option = $("<option></option>").attr('value', item.family).text item.family
+        if item.family == ($ '#font').data('selected')
+          option.attr 'selected', 'selected'
+        ($ '#font').append option
+    error: (jqXHR, textStatus, errorThrown) ->
+      LOG 'Google Font Error'

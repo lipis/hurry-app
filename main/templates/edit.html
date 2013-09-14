@@ -40,8 +40,13 @@
           <input id="color" type="color" class="form-control" value="{{color or '000000'}}">
         </div>
         <div class="col-sm-6 form-group">
-          <label for="font">Google Font</label>
-          <input id="font" type="text" class="form-control" value="{{font or 'Overlock'}}" autocomplete="off">
+          <label for="font">
+            Google Font
+            <a href="http://www.google.com/fonts" target="_blacnk"><span class="icon-external-link-sign"></span></a>
+          </label>
+          <select id="font" class="form-control" data-selected="{{font or 'Overlock'}}">
+            <option value="None">Loading..</option>
+          </select>
         </div>
       </div>
     </div>
