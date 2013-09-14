@@ -1,10 +1,11 @@
 hurry-app
 =========
 
-A web app which based on a url given date-time visualizes the remaining time till 
-that moment in seconds, minutes, hours, days, weeks, months and years. 
+A web app which based on a url given date-time visualizes the remaining time
+till that moment in seconds, minutes, hours, days, weeks, months and years.
 
-It's good for birthdays, anniversaries, product launch dates, milestones, you name it..
+It's good for launch dates, milestones, birthdays, anniversaries, you
+name it..
 
 [http://hurry-app.appspot.com](http://hurry-app.appspot.com)
 
@@ -17,8 +18,6 @@ Examples
 - [/12:34](http://hurry-app.appspot.com/12:34)
 - [/12:34/Final](http://hurry-app.appspot.com/12:34/Final)
 - [/2013-01-01/Happy New Year!](http://hurry-app.appspot.com/2014-01-01/Happy%20New%20Year!)
-- [/1234567890](http://hurry-app.appspot.com/1234567890)
-- [/1234567890/Unix Time](http://hurry-app.appspot.com/1234567890/Unix%20Time)
 - [/1955-10-28/Bill Gates](http://hurry-app.appspot.com/1955-10-28/Bill%20Gates)
 
 (All input times are in UTC)

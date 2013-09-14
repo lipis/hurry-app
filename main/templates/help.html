@@ -1,0 +1,20 @@
+<div class="help">
+  <ul class="list-inline">
+    <li>
+      <a href="{{request.url}}{{'?' if request.url.find('?') == -1 else '&'}}edit">
+        <span class='icon-home'></span>
+      </a>
+    </li>
+    <li>
+      <a href="{{request.url}}{{'?' if request.url.find('?') == -1 else '&'}}edit">
+        <span class='icon-pencil'></span>
+      </a>
+    </li>
+    <li><a href="https://github.com/lipis/hurry-app"><span class='icon-github'></span></a></li>
+    <li>
+      <a href="{{request.url}}{{'?' if request.url.find('?') == -1 else '&'}}embed" class="popout">
+        <span class='icon-external-link-sign'></span>
+      </a>
+    </li>
+  </ul>
+</div>

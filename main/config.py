@@ -52,5 +52,6 @@ SCRIPTS = {
         'src/coffee/site/profile.coffee',
         'src/coffee/site/admin.coffee',
         'src/coffee/site/countdown.coffee',
+        'src/coffee/site/edit.coffee',
       ],
   }

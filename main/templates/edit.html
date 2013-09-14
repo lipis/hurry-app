@@ -1,0 +1,51 @@
+<section id="edit">
+  <div class="page-header text-center">
+    <h1><span class="icon-time"></span> {{config.CONFIG_DB.brand_name}}</h1>
+    <p class="lead">
+      It's good for launch dates, milestones, birthdays, anniversaries, you name it..
+    </p>
+    <ul class="list-inline help-credit lead">
+      <li>
+        <a href="https://github.com/lipis/hurry-app" class="btn btn-default btn-lg">
+          <span class='icon-github'></span>
+          GitHub Project
+        </a>
+      </li>
+    </ul>
+  </div>
+  <div class="row">
+    <div class="col-md-8 col-md-offset-2 col-lg-6 col-lg-offset-3">
+      <div class="row">
+        <div class="col-sm-3 form-group">
+          <label for="date">Date</label>
+          <input id="date" type="string" class="form-control" value="{{'' if date == None else date}}" placeholder="YYYY-MM-DD" maxlength="10" autocomplete="off" autofocus>
+        </div>
+        <div class="col-sm-2 form-group">
+          <label for="time">Time</label>
+          <input id="time" type="string" class="form-control" value="{{'' if time == None else time}}" placeholder="hh:mm" maxlength="5" autocomplete="off">
+        </div>
+        <div class="col-sm-7 form-group">
+          <label for="title">Title</label>
+          <input id="title" type="text" class="form-control" value="{{title or ''}}" maxlength="256" autocomplete="off">
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-sm-3 form-group">
+          <label for="background">Background</label>
+          <input id="background" type="color" class="form-control" value="{{background or 'ffffff'}}">
+        </div>
+        <div class="col-sm-3 form-group">
+          <label for="color">Color</label>
+          <input id="color" type="color" class="form-control" value="{{color or '000000'}}">
+        </div>
+        <div class="col-sm-6 form-group">
+          <label for="font">Google Font</label>
+          <input id="font" type="text" class="form-control" value="{{font or 'Overlock'}}" autocomplete="off">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="url" class="well link-preview">{{request.host_url}}</div>
+</section>

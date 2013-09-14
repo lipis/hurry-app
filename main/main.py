@@ -23,45 +23,40 @@ import admin
 ################################################################################
 # Main page
 ################################################################################
-@app.route('/<int:timestamp>')
-@app.route('/<int:timestamp>/<path:title>')
 @app.route('/<int:year>-<int:month>-<int:day>')
 @app.route('/<int:year>-<int:month>-<int:day>/<path:title>')
 @app.route('/<int:year>-<int:month>-<int:day>-<int:hour>')
-@app.route('/<int:year>-<int:month>-<int:day>-<int:hour>/<path:title>')
-@app.route('/<int:year>-<int:month>-<int:day>-<int:hour>:<int:minute>')
-@app.route('/<int:year>-<int:month>-<int:day>-<int:hour>:<int:minute>/<path:title>')
+@app.route('/<int:year>-<int:month>-<int:day>/<int:hour>/<path:title>')
+@app.route('/<int:year>-<int:month>-<int:day>/<int:hour>:<int:minute>')
+@app.route('/<int:year>-<int:month>-<int:day>/<int:hour>:<int:minute>/<path:title>')
 @app.route('/<int:hour>:<int:minute>')
 @app.route('/<int:hour>:<int:minute>/<path:title>')
-@app.route('/')
 @app.route('/<path:title>')
-def countdown(timestamp=None, year=None, month=1, day=1, hour=None, minute=0, title=None):
-  if year is not None and hour is not None:
-    try:
-      date = datetime.datetime(year, month, day, hour, minute)
-      timestamp = date.strftime('%s')
-    except:
-      pass
-  elif year is not None:
-    try:
-      date = datetime.datetime(year, month, day)
-      timestamp = date.strftime('%s')
-    except:
-      pass
-  elif hour is not None:
-    try:
-      now = datetime.datetime.utcnow()
-      date = datetime.datetime(now.year, now.month, now.day, hour, minute)
-      timestamp = date.strftime('%s')
-    except:
-      pass
+@app.route('/')
+def countdown(year=None, month=None, day=None, hour=None, minute=None, title=None):
+  now = datetime.datetime.utcnow()
+  date_ = None
+  time_ = None
+  if year and month and day:
+    date_ = '%04d-%02d-%02d' % (year, month, day)
+  if hour is not None and minute is not None:
+    time_ = '%02d:%02d' % (hour, minute)
 
   return flask.render_template(
       'countdown.html',
       html_class='countdown',
-      timestamp=timestamp,
       title=title,
-      now=datetime.datetime.utcnow(),
+      date=date_,
+      time=time_,
+      now=now,
+      year=year,
+      month=month,
+      day=day,
+      hour=hour,
+      minute=minute,
+      background=util.param('background') or util.param('b'),
+      color=util.param('color') or util.param('c'),
+      font=util.param('font') or util.param('f'),
     )
 
 

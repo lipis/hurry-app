@@ -1,7 +1,5 @@
 $ ->
 
-$ -> $('html.welcome').each ->
-
 $ -> $('html.countdown').each ->
   init_countdown()
 

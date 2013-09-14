@@ -16,3 +16,40 @@ window.get_parameter_by_name = (name) ->
 
 
 window.requestAnimationFrame = window.requestAnimationFrame or window.mozRequestAnimationFrame or window.webkitRequestAnimationFrame or window.msRequestAnimationFrame
+
+window.zero = (number) ->
+  if number < 10
+    return '0' + number
+  return number
+
+
+window.fix_time = (time) ->
+  if "#{time}".indexOf(':') == -1
+    hour = parseInt(time)
+    minute = 0
+  else
+    parts = time.split(':')
+    hour = parseInt(parts[0])
+    minute = parseInt(parts[1]) or 0
+
+  hour = Math.max(0, Math.min(23, parseInt(hour)))
+  minute = Math.max(0, Math.min(59, parseInt(minute)))
+
+  if isNaN(hour) or isNaN(minute)
+    return false
+
+  return "#{zero hour}:#{zero minute}"
+
+window.fix_date = (date) ->
+  return false if not date
+
+  parts = date.split('-')
+
+  year = Math.max(100, Math.min(9999, parseInt(parts[0])))
+  month = parseInt(parts[1]) or 1
+  day = parseInt(parts[2]) or 1
+
+  timestamp = moment "#{year}-#{month}-#{day}", "YYYY-MM-DD"
+  if timestamp.isValid()
+    return timestamp.format('YYYY-MM-DD')
+  return false

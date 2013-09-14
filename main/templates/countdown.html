@@ -1,37 +1,14 @@
 # extends 'base.html'
 
 # block content
-  <div class="timers" data-timestamp="{{timestamp}}">
-    # if title
-      <h1>{{title}}</h1>
-    # endif
-    <h2 class="date"></h2>
-    <h3 class="time">
-      <span class="utc"></span>
-      <span class="local"></span>
-    </h3>
-
-    <ul class="list-unstyled units"></ul>
-  </div>
-
-  <div class="help collapsed">
-    <div class="help-header">
-      <span class="icon-arrow-up"></span>
-    </div>
-    <div class="help-body">
-      <ul class="list-unstyled">
-        <li><a href="/1234567890">/1234567890</a></li>
-        <li><a href="/1234567890/Unix time">/1234567890/Unix time</a></li>
-        <li><a href="/{{now.year + 1}}-07-08">/{{now.year + 1}}-07-08</a></li>
-        <li><a href="/2032-01-23-21:42">/2032-01-23-21:42</a></li>
-        <li><a href="/12:34">/12:34</a></li>
-        <li><a href="/{{now.year + 1}}-01-01/Happy New Year!">/{{now.year + 1}}-01-01/Happy New Year!</a></li>
-        <li><a href="/2016-08-05-20:30/Opening Ceremony - Rio 2016">/2016-08-05-20:30/Opening Ceremony - Rio 2016</a></li>
-      </ul>
-      <ul class="list-inline help-credit">
-        <li><a href="https://github.com/lipis/hurry-app">GitHub Project</a></li>
-        <li><a href="{{url_for('feedback')}}">Send Feedback</a></li>
-      </ul>
-    </div>
-  </div>
+  # if request.path == '/' or request.args.get('edit') != None
+    # include 'edit.html'
+  # elif request.args.get('embed') == None
+    # include 'help.html'
+  # endif
+  <div class="timers"
+      data-title="{{title or ''}}"
+      data-date="{{date or ''}}"
+      data-time="{{time or ''}}"
+    ></div>
 # endblock
