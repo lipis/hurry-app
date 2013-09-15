@@ -77,12 +77,9 @@ window.update_url = ->
       url += "?#{params}"
 
     ($ '#url').show()
-    embed_url = "#{url}#{if url.indexOf('?') == -1 then '?' else '&'}embed"
-    popout = "<a class='popout alert-link'><span class='icon-external-link-sign'></span></a>"
     url = location.origin + url
-    ($ '#url').html """
-        #{popout} | <a href="#{url}" class="alert-link">#{url}</a>
-      """
+    embed_url = "#{url}#{if url.indexOf('?') == -1 then '?' else '&'}embed"
+    ($ '#url').html "<a href='#{url}' class='alert-link'>#{url}</a>"
     ($ '.popout').attr 'href', embed_url
   else
     ($ '#url').hide()
