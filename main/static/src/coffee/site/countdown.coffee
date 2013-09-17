@@ -75,7 +75,7 @@ class window.Timers
   set_timestamp: (timestamp) ->
     @goal = moment.unix(timestamp)
     window.goal = @goal
-    ($ 'h2').text @goal.utc().format 'MMMM Do YYYY'
+    ($ 'h2').text @goal.utc().format 'dddd, MMMM Do YYYY'
     utc = '<small>UTC</small> ' + @goal.utc().format 'HH:mm'
     local = '<small>LOCAL</small> ' + @goal.zone(moment().zone()).format 'HH:mm'
     ($ 'h3').html "<span>#{utc}</span> <span>#{local}</span>"
