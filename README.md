@@ -32,7 +32,7 @@ Python](https://developers.google.com/appengine/docs/python/) and
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 To run the app:
 
-    $ cd /path/to/hurry-app/main
+    $ cd /path/to/hurry-app
     $ ./run.py -s
 
 To test it visit `http://localhost:8080/` in your browser.

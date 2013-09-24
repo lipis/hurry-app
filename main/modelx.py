@@ -13,22 +13,6 @@ class BaseX(object):
       return cls_db_list[0]
     return None
 
-  @ndb.ComputedProperty
-  def created_ago(self):
-    return util.format_datetime_ago(self.created) if self.created else None
-
-  @ndb.ComputedProperty
-  def modified_ago(self):
-    return util.format_datetime_ago(self.modified) if self.modified else None
-
-  @ndb.ComputedProperty
-  def created_utc(self):
-    return util.format_datetime_utc(self.created) if self.created else None
-
-  @ndb.ComputedProperty
-  def modified_utc(self):
-    return util.format_datetime_utc(self.modified) if self.modified else None
-
 
 class ConfigX(object):
   @classmethod
@@ -37,7 +21,7 @@ class ConfigX(object):
 
 
 class UserX(object):
-  @ndb.ComputedProperty
+  @property
   def avatar_url(self):
     return 'http://www.gravatar.com/avatar/%s?d=identicon&r=x' % (
         md5.new(self.email or self.name).hexdigest().lower()
