@@ -25,7 +25,7 @@ Examples
 Running
 -------
 **hurry-app** is based on [gae-init](https://github.com/gae-init/gae-init) so
-in order to run it you'll need to have installed [Google App Engine for
+to run it locally you'll need to have installed [Google App Engine for
 Python](https://developers.google.com/appengine/docs/python/) and
 [node.js](http://nodejs.org).
 
