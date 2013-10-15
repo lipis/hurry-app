@@ -78,12 +78,16 @@ def sitemap():
 # Feedback
 ################################################################################
 class FeedbackForm(wtf.Form):
-  subject = wtf.TextField('Subject', [wtf.validators.required()])
-  message = wtf.TextAreaField('Message', [wtf.validators.required()])
-  email = wtf.TextField('Email (optional)', [
-      wtf.validators.optional(),
-      wtf.validators.email('That does not look like an email'),
-    ])
+  subject = wtf.TextField('Subject',
+      [wtf.validators.required()], filters=[util.strip_filter],
+    )
+  message = wtf.TextAreaField('Message',
+      [wtf.validators.required()], filters=[util.strip_filter],
+    )
+  email = wtf.TextField('Email (optional)',
+      [wtf.validators.optional(), wtf.validators.email()],
+      filters=[util.strip_filter],
+    )
 
 
 @app.route('/feedback/', methods=['GET', 'POST'])
@@ -98,10 +102,10 @@ def feedback():
         to=config.CONFIG_DB.feedback_email,
         subject='[%s] %s' % (
             config.CONFIG_DB.brand_name,
-            form.subject.data.strip(),
+            form.subject.data,
           ),
-        reply_to=form.email.data.strip() or config.CONFIG_DB.feedback_email,
-        body='%s\n\n%s' % (form.message.data.strip(), form.email.data.strip())
+        reply_to=form.email.data or config.CONFIG_DB.feedback_email,
+        body='%s\n\n%s' % (form.message.data, form.email.data)
       )
     flask.flash('Thank you for your feedback!', category='success')
     return flask.redirect(flask.url_for('countdown'))

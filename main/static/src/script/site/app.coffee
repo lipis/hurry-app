@@ -1,13 +1,13 @@
 $ ->
 
-$ -> $('html.countdown').each ->
+$ -> ($ 'html.countdown').each ->
   init_countdown()
 
-$ -> $('html.profile').each ->
+$ -> ($ 'html.profile').each ->
   init_profile()
 
-$ -> $('html.feedback').each ->
+$ -> ($ 'html.feedback').each ->
   init_loading_button()
 
-$ -> $('html.admin-config').each ->
+$ -> ($ 'html.admin-config').each ->
   init_admin_config()

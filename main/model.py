@@ -40,16 +40,10 @@ class Config(Base, modelx.ConfigX):
 
   _PROPERTIES = Base._PROPERTIES.union(set([
       'analytics_id',
-      'announcement_html',
-      'announcement_type',
       'brand_name',
-      'facebook_app_id',
-      'facebook_app_secret',
       'feedback_email',
       'flask_secret_key',
       'google_api_key',
-      'twitter_consumer_key',
-      'twitter_consumer_secret',
     ]))
 
 
@@ -64,6 +58,7 @@ class User(Base, modelx.UserX):
   federated_id = ndb.StringProperty(indexed=True, default='')
   facebook_id = ndb.StringProperty(indexed=True, default='')
   twitter_id = ndb.StringProperty(indexed=True, default='')
+  github_id = ndb.StringProperty(indexed=True, default='')
 
   _PROPERTIES = Base._PROPERTIES.union(set([
       'name',

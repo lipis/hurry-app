@@ -1,10 +1,15 @@
-window.LOG = () ->
-  console?.log?(arguments...)
+window.LOG = ->
+  console?.log? arguments...
 
 
-window.init_loading_button = () ->
-  $('body').on 'click', '.btn-loading', ->
-    $(this).button('loading')
+window.init_common = ->
+  init_loading_button()
+  init_time()
+
+
+window.init_loading_button = ->
+  ($ 'body').on 'click', '.btn-loading', ->
+    ($ this).button 'loading'
 
 
 window.init_time = () ->
@@ -14,7 +19,7 @@ window.init_time = () ->
         date = moment.utc ($ this).attr 'datetime'
         diff = moment().diff date , 'days'
         if diff > 25
-          ($ this).text date.local().format 'YYYY-DD-MM'
+          ($ this).text date.local().format 'YYYY-MM-DD'
         else
           ($ this).text date.fromNow()
         ($ this).attr 'title', date.local().format 'dddd, MMMM Do YYYY, HH:mm:ss Z'
@@ -28,6 +33,7 @@ window.init_time = () ->
 window.add_commas = (n) ->
   return String(n).replace(/(\d)(?=(\d{3})+$)/g, '$1,')
 
+
 window.get_parameter_by_name = (name) ->
   name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]")
   regex = new RegExp("[\\?&]" + name + "=([^&#]*)")
@@ -37,10 +43,12 @@ window.get_parameter_by_name = (name) ->
 
 window.requestAnimationFrame = window.requestAnimationFrame or window.mozRequestAnimationFrame or window.webkitRequestAnimationFrame or window.msRequestAnimationFrame
 
+
 window.zero = (number) ->
   if number < 10
     return '0' + number
   return number
+
 
 window.fix_time = (time) ->
   if "#{time}".indexOf(':') == -1
@@ -58,6 +66,7 @@ window.fix_time = (time) ->
     return false
 
   return "#{zero hour}:#{zero minute}"
+
 
 window.fix_date = (date) ->
   return false if not date

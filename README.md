@@ -48,4 +48,4 @@ automatically to `*.css` & `*.js` run in another bash:
 To deploy the app on Google App Engine:
 
     $ ./run.py -m
-    $ appcfg.py update .
+    $ appcfg.py update main

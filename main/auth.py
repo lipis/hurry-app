@@ -181,8 +181,8 @@ def retrieve_user_from_google(google_user):
 # Helpers
 ################################################################################
 def create_user_db(name, username, email='', **params):
-  username = username.split('@')[0]
-  new_username = username
+  username = username.split('@')[0].lower()
+  new_username = username.replace(' ', '.').replace('_', '.').replace('-', '.')
   n = 1
   while model.User.retrieve_one_by('username', new_username) is not None:
     new_username = '%s%d' % (username, n)
@@ -198,11 +198,13 @@ def create_user_db(name, username, email='', **params):
   return user_db
 
 
+@ndb.toplevel
 def signin_user_db(user_db):
   if not user_db:
     return flask.redirect(flask.url_for('signin'))
   flask_user_db = FlaskUser(user_db)
   if login.login_user(flask_user_db):
+    user_db.put_async()
     flask.flash('Hello %s, welcome to %s!!!' % (
         user_db.name, config.CONFIG_DB.brand_name,
       ), category='success')
