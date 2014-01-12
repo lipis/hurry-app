@@ -63,7 +63,7 @@ class window.Timers
           <li class="#{unit}">
             <div class="int"></div>
             <div class="dec"></div>
-            <div class="caption"><span class="icon-arrow-up"></span> #{unit}</div>
+            <div class="caption"><span class="fa fa-arrow-up"></span> #{unit}</div>
           </li>
         """
 
@@ -85,9 +85,9 @@ window.repaint = ->
   return if not goal
   now = moment.utc()
   if now - goal > 0
-    ($ '.icon-arrow-up', '.caption').removeClass('icon-rotate-180')
+    ($ '.fa-arrow-up', '.caption').removeClass('fa-rotate-180')
   else
-    ($ '.icon-arrow-up', '.caption').addClass('icon-rotate-180')
+    ($ '.fa-arrow-up', '.caption').addClass('fa-rotate-180')
 
   milliseconds = Math.abs(now - goal).toFixed 1
   values =
