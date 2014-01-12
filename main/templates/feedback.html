@@ -9,20 +9,18 @@
   <div class="row">
     <div class="col-md-4 col-sm-6">
       <form method="POST" action="." novalidate>
-        <fieldset>
-          {{form.csrf_token}}
+        {{form.csrf_token}}
 
-          {{forms.text_field(form.subject)}}
-          {{forms.textarea_field(form.message, rows=8)}}
-          {{forms.email_field(form.email)}}
+        {{forms.text_field(form.subject, autofocus=True)}}
+        {{forms.textarea_field(form.message, rows=8)}}
+        {{forms.email_field(form.email)}}
 
-          <button type="submit" class="btn btn-primary btn-block btn-loading" data-loading-text="Sending Feedback..">
-            Send Feedback
-          </button>
-          <a type="submit" class="btn btn-default btn-block btn-loading" href="{{url_for('countdown')}}">
-            Cancel
-          </a>
-        </fieldset>
+        <button type="submit" class="btn btn-primary btn-block btn-loading" data-loading-text="Sending Feedback..">
+          Send Feedback
+        </button>
+        <a type="submit" class="btn btn-default btn-block btn-loading" href="{{url_for('countdown')}}">
+          Cancel
+        </a>
       </form>
     </div>
   </div>

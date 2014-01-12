@@ -1,23 +1,24 @@
 # -*- coding: utf-8 -*-
 
-from google.appengine.ext import ndb
-from google.appengine.api import users
-
 import functools
+import re
 
+from flask.ext import login
+from flask.ext import oauth
+from google.appengine.api import users
+from google.appengine.ext import ndb
 import flask
-from flaskext import login
 
-import util
-import model
 import config
+import model
+import util
 
 from main import app
 
 
-################################################################################
-# Flaskext Login
-################################################################################
+###############################################################################
+# Flask Login
+###############################################################################
 login_manager = login.LoginManager()
 
 
@@ -83,9 +84,9 @@ def is_logged_in():
   return login.current_user.id != 0
 
 
-################################################################################
+###############################################################################
 # Decorators
-################################################################################
+###############################################################################
 def login_required(f):
   @functools.wraps(f)
   def decorated_function(*args, **kws):
@@ -110,9 +111,9 @@ def admin_required(f):
   return decorated_function
 
 
-################################################################################
+###############################################################################
 # Sign in stuff
-################################################################################
+###############################################################################
 @app.route('/login/')
 @app.route('/signin/')
 def signin():
@@ -121,12 +122,16 @@ def signin():
     next_url = flask.url_for('welcome')
 
   google_signin_url = flask.url_for('signin_google', next=next_url)
+  twitter_signin_url = flask.url_for('signin_twitter', next=next_url)
+  facebook_signin_url = flask.url_for('signin_facebook', next=next_url)
 
   return flask.render_template(
       'signin.html',
       title='Please sign in',
       html_class='signin',
       google_signin_url=google_signin_url,
+      twitter_signin_url=twitter_signin_url,
+      facebook_signin_url=facebook_signin_url,
       next_url=next_url,
     )
 
@@ -134,13 +139,13 @@ def signin():
 @app.route('/signout/')
 def signout():
   login.logout_user()
-  flask.flash(u'You have been signed out.')
+  flask.flash(u'You have been signed out.', category='success')
   return flask.redirect(flask.url_for('welcome'))
 
 
-################################################################################
+###############################################################################
 # Google
-################################################################################
+###############################################################################
 @app.route('/signin/google/')
 def signin_google():
   google_url = users.create_login_url(
@@ -161,7 +166,8 @@ def google_authorized():
 
 
 def retrieve_user_from_google(google_user):
-  user_db = model.User.retrieve_one_by('federated_id', google_user.user_id())
+  auth_id = 'federated_%s' % google_user.user_id()
+  user_db = model.User.retrieve_one_by('auth_ids', auth_id)
   if user_db:
     if not user_db.admin and users.is_current_user_admin():
       user_db.admin = True
@@ -169,20 +175,143 @@ def retrieve_user_from_google(google_user):
     return user_db
 
   return create_user_db(
+      auth_id,
       google_user.nickname().split('@')[0].replace('.', ' ').title(),
       google_user.nickname(),
       google_user.email(),
-      federated_id=google_user.user_id(),
       admin=users.is_current_user_admin(),
     )
 
 
-################################################################################
+###############################################################################
+# Twitter
+###############################################################################
+twitter_oauth = oauth.OAuth()
+
+
+twitter = twitter_oauth.remote_app(
+    'twitter',
+    base_url='https://api.twitter.com/1.1/',
+    request_token_url='https://api.twitter.com/oauth/request_token',
+    access_token_url='https://api.twitter.com/oauth/access_token',
+    authorize_url='https://api.twitter.com/oauth/authorize',
+    consumer_key=config.CONFIG_DB.twitter_consumer_key,
+    consumer_secret=config.CONFIG_DB.twitter_consumer_secret,
+  )
+
+
+@app.route('/_s/callback/twitter/oauth-authorized/')
+@twitter.authorized_handler
+def twitter_authorized(resp):
+  if resp is None:
+    flask.flash(u'You denied the request to sign in.')
+    return flask.redirect(util.get_next_url())
+
+  flask.session['oauth_token'] = (
+    resp['oauth_token'],
+    resp['oauth_token_secret']
+  )
+  user_db = retrieve_user_from_twitter(resp)
+  return signin_user_db(user_db)
+
+
+@twitter.tokengetter
+def get_twitter_token():
+  return flask.session.get('oauth_token')
+
+
+@app.route('/signin/twitter/')
+def signin_twitter():
+  flask.session.pop('oauth_token', None)
+  try:
+    return twitter.authorize(
+        callback=flask.url_for('twitter_authorized',
+        next=util.get_next_url()),
+      )
+  except:
+    flask.flash(
+        'Something went wrong with Twitter sign in. Please try again.',
+        category='danger',
+      )
+    return flask.redirect(flask.url_for('signin', next=util.get_next_url()))
+
+
+def retrieve_user_from_twitter(response):
+  auth_id = 'twitter_%s' % response['user_id']
+  user_db = model.User.retrieve_one_by('auth_ids', auth_id)
+  if user_db:
+    return user_db
+
+  return create_user_db(
+      auth_id,
+      response['screen_name'],
+      response['screen_name'],
+    )
+
+
+###############################################################################
+# Facebook
+###############################################################################
+facebook_oauth = oauth.OAuth()
+
+facebook = facebook_oauth.remote_app(
+    'facebook',
+    base_url='https://graph.facebook.com/',
+    request_token_url=None,
+    access_token_url='/oauth/access_token',
+    authorize_url='https://www.facebook.com/dialog/oauth',
+    consumer_key=config.CONFIG_DB.facebook_app_id,
+    consumer_secret=config.CONFIG_DB.facebook_app_secret,
+    request_token_params={'scope': 'email'},
+  )
+
+
+@app.route('/_s/callback/facebook/oauth-authorized/')
+@facebook.authorized_handler
+def facebook_authorized(resp):
+  if resp is None:
+    return 'Access denied: reason=%s error=%s' % (
+      flask.request.args['error_reason'],
+      flask.request.args['error_description']
+    )
+  flask.session['oauth_token'] = (resp['access_token'], '')
+  me = facebook.get('/me')
+  user_db = retrieve_user_from_facebook(me.data)
+  return signin_user_db(user_db)
+
+
+@facebook.tokengetter
+def get_facebook_oauth_token():
+  return flask.session.get('oauth_token')
+
+
+@app.route('/signin/facebook/')
+def signin_facebook():
+  return facebook.authorize(callback=flask.url_for('facebook_authorized',
+      next=util.get_next_url(),
+      _external=True),
+    )
+
+
+def retrieve_user_from_facebook(response):
+  auth_id = 'facebook_%s' % response['id']
+  user_db = model.User.retrieve_one_by('auth_ids', auth_id)
+  if user_db:
+    return user_db
+  return create_user_db(
+      auth_id,
+      response['name'],
+      response['username'] if 'username' in response else response['id'],
+      response['email'],
+    )
+
+
+###############################################################################
 # Helpers
-################################################################################
-def create_user_db(name, username, email='', **params):
-  username = username.split('@')[0].lower()
-  new_username = username.replace(' ', '.').replace('_', '.').replace('-', '.')
+###############################################################################
+def create_user_db(auth_id, name, username, email='', **params):
+  username = re.sub(r'_+|-+|\s+', '.', username.split('@')[0].lower().strip())
+  new_username = username
   n = 1
   while model.User.retrieve_one_by('username', new_username) is not None:
     new_username = '%s%d' % (username, n)
@@ -192,6 +321,7 @@ def create_user_db(name, username, email='', **params):
       name=name,
       email=email.lower(),
       username=new_username,
+      auth_ids=[auth_id],
       **params
     )
   user_db.put()

@@ -1,12 +1,14 @@
 # -*- coding: utf-8 -*-
 
-from google.appengine.api import mail
-from flaskext import wtf
 import datetime
+import logging
 import time
+
+from flask.ext import wtf
+from google.appengine.api import mail
 import flask
+
 import config
-import model
 import util
 
 
@@ -16,13 +18,19 @@ app.jinja_env.line_statement_prefix = '#'
 app.jinja_env.line_comment_prefix = '##'
 app.jinja_env.globals.update(slugify=util.slugify)
 
-import auth
 import admin
+import auth
+import user
 
 
-################################################################################
+if config.DEVELOPMENT:
+  from werkzeug import debug
+  app.wsgi_app = debug.DebuggedApplication(app.wsgi_app, evalex=True)
+
+
+###############################################################################
 # Main page
-################################################################################
+###############################################################################
 @app.route('/<int:year>-<int:month>-<int:day>')
 @app.route('/<int:year>-<int:month>-<int:day>/<path:title>')
 @app.route('/<int:year>-<int:month>-<int:day>-<int:hour>')
@@ -60,9 +68,9 @@ def countdown(year=None, month=None, day=None, hour=None, minute=None, title=Non
     )
 
 
-################################################################################
+###############################################################################
 # Sitemap stuff
-################################################################################
+###############################################################################
 @app.route('/sitemap.xml')
 def sitemap():
   response = flask.make_response(flask.render_template(
@@ -74,19 +82,57 @@ def sitemap():
   return response
 
 
-################################################################################
+###############################################################################
+# Profile stuff
+###############################################################################
+class ProfileUpdateForm(wtf.Form):
+  name = wtf.StringField('Name',
+      [wtf.validators.required()], filters=[util.strip_filter],
+    )
+  email = wtf.StringField('Email',
+      [wtf.validators.optional(), wtf.validators.email()],
+      filters=[util.email_filter],
+    )
+
+
+@app.route('/_s/profile/', endpoint='profile_service')
+@app.route('/profile/', methods=['GET', 'POST'])
+@auth.login_required
+def profile():
+  user_db = auth.current_user_db()
+  form = ProfileUpdateForm(obj=user_db)
+
+  if form.validate_on_submit():
+    form.populate_obj(user_db)
+    user_db.put()
+    return flask.redirect(flask.url_for('welcome'))
+
+  if flask.request.path.startswith('/_s/'):
+    return util.jsonify_model_db(user_db)
+
+  return flask.render_template(
+      'profile.html',
+      title='Profile',
+      html_class='profile',
+      form=form,
+      user_db=user_db,
+      has_json=True,
+    )
+
+
+###############################################################################
 # Feedback
-################################################################################
+###############################################################################
 class FeedbackForm(wtf.Form):
-  subject = wtf.TextField('Subject',
+  subject = wtf.StringField('Subject',
       [wtf.validators.required()], filters=[util.strip_filter],
     )
   message = wtf.TextAreaField('Message',
       [wtf.validators.required()], filters=[util.strip_filter],
     )
-  email = wtf.TextField('Email (optional)',
+  email = wtf.StringField('Email (optional)',
       [wtf.validators.optional(), wtf.validators.email()],
-      filters=[util.strip_filter],
+      filters=[util.email_filter],
     )
 
 
@@ -95,7 +141,7 @@ def feedback():
   if not config.CONFIG_DB.feedback_email:
     return flask.abort(418)
 
-  form = FeedbackForm()
+  form = FeedbackForm(obj=auth.current_user_db())
   if form.validate_on_submit():
     mail.send_mail(
         sender=config.CONFIG_DB.feedback_email,
@@ -120,9 +166,9 @@ def feedback():
     )
 
 
-################################################################################
+###############################################################################
 # Error Handling
-################################################################################
+###############################################################################
 @app.errorhandler(400)  # Bad Request
 @app.errorhandler(401)  # Unauthorized
 @app.errorhandler(403)  # Forbidden
@@ -132,19 +178,20 @@ def feedback():
 @app.errorhandler(418)  # I'm a Teapot
 @app.errorhandler(500)  # Internal Server Error
 def error_handler(e):
+  logging.exception(e)
   try:
     e.code
-  except:
-    class e(object):
-      code = 500
-      name = 'Internal Server Error'
+  except AttributeError:
+    e.code = 500
+    e.name = 'Internal Server Error'
 
   if flask.request.path.startswith('/_s/'):
     return util.jsonpify({
         'status': 'error',
         'error_code': e.code,
-        'error_name': e.name.lower().replace(' ', '_'),
+        'error_name': util.slugify(e.name),
         'error_message': e.name,
+        'error_class': e.__class__.__name__,
       }), e.code
 
   return flask.render_template(
@@ -153,3 +200,9 @@ def error_handler(e):
       html_class='error-page',
       error=e,
     ), e.code
+
+
+if config.PRODUCTION:
+  @app.errorhandler(Exception)
+  def production_error_handler(e):
+    return error_handler(e)

@@ -112,7 +112,6 @@ window.set_theme = ->
 
 window.init_google_font = (data) ->
   return if not data?.items?
-
   ($ '#font').empty()
   for item in data.items
     option = $("<option></option>").attr('value', item.family).text item.family
