@@ -1,6 +1,8 @@
 hurry-app
 =========
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/lipis/hurry-app.svg)](https://greenkeeper.io/)
+
 A web app which based on a url given date-time visualizes the remaining time
 till that moment in seconds, minutes, hours, days, weeks, months and years.
 
