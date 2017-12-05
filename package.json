@@ -14,11 +14,11 @@
   },
   "dependencies": {
     "coffee-script": "~1",
-    "less": "~1",
-    "uglify-js": "~2"
+    "less": "~2.7.3",
+    "uglify-js": "~3.2.1"
   },
   "devDependencies": {
-    "grunt": "0.4.x",
-    "grunt-contrib-watch": "0.5.x"
+    "grunt": "~1.0.1",
+    "grunt-contrib-watch": "~1.0.0"
   }
 }
